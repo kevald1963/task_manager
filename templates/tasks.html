@@ -12,6 +12,11 @@
         {{task.due_date}}
     {% endfor %}
 
+    <p>Simple HTML paragraph with data-driven FOR loop:</p>
+    {% for task in tasks %}
+        <p>{{task.task_name}}</p>
+    {% endfor %}
+
     <p>Materialize collapsible with data-driven FOR loop:</p>
     <ul class="collapsible" data-collapsible="accordion">
         {% for task in tasks %}
