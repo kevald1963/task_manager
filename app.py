@@ -10,6 +10,7 @@ app.config["MONGO_DBNAME"] = "task_manager"
 
 mongo = PyMongo(app)
 
+# Have to use hard-coded gitpod url, otherwise tries to redirect to localhost causing a 'connection refused' error.
 gitpod_url = "https://5000-ae34fd21-0471-4da9-8255-f8e6a8ea7825.ws-eu01.gitpod.io/"
 
 @app.route('/')
@@ -21,18 +22,19 @@ def get_tasks():
 def add_task():
     return render_template("addtask.html", categories=list(mongo.db.categories.find()))
 
+# Create Go to the Edit Task page and show the data for the ID associated with this task record. -->
 @app.route('/insert_task', methods=["POST"])
 def insert_task():
     tasks = mongo.db.tasks
     # Convert form data to a dictionary to make it usable by Mongo.
     tasks.insert_one(request.form.to_dict())
-    # Have to use hard-coded gitpod url, otherwise tries to redirect to localhost causing a connection refused error.
     return redirect(gitpod_url + 'get_tasks')
     #return redirect(url_for('get_tasks'))
 
+# Go to the Edit Task page and show the data for the ID associated with this task record. -->
 @app.route('/edit_task/<task_id>')
 def edit_task(task_id):
-    # Fetch the task record from the database for the displayed task we want to edit.
+    # Fetch the task record from the database for the displayed to edit.
     _task = mongo.db.tasks.find_one({"_id": ObjectId(task_id)})
     # Fetch all categories from the database to display in the dropdown list, so user can choose a new one if they wish.
     _categories = mongo.db.categories.find()
@@ -40,10 +42,11 @@ def edit_task(task_id):
     # Display the record for editing.
     return render_template("edittask.html", task= _task, categories = category_list)
 
+# UPDATE the record from the collection and return to the Task List page.
 @app.route('/update_task/<task_id>', methods=["POST"])
 def update_task(task_id):
     tasks = mongo.db.tasks
-    tasks.update( {'_id': ObjectId(task_id)},
+    tasks.update({"_id": ObjectId(task_id)},
     {
         'task_name': request.form.get('task_name'),
         'category_name': request.form.get('category_name'),
@@ -51,6 +54,13 @@ def update_task(task_id):
         'due_date': request.form.get('due_date'),
         'is_urgent': request.form.get('is_urgent')
     })
+    return redirect(gitpod_url + 'get_tasks')
+    #return redirect(url_for('get_tasks'))
+
+# DELETE the record from the collection and return to the Task List page.
+@app.route('/delete_task/<task_id>')
+def delete_task(task_id):
+    mongo.db.tasks.remove({"_id": ObjectId(task_id)})
     return redirect(gitpod_url + 'get_tasks')
     #return redirect(url_for('get_tasks'))
 
