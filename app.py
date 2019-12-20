@@ -19,11 +19,12 @@ gitpod_url = "https://5000-ae34fd21-0471-4da9-8255-f8e6a8ea7825.ws-eu01.gitpod.i
 def get_tasks():
     return render_template("tasks.html", tasks=list(mongo.db.tasks.find()))
 
+# Show the Add Task page.
 @app.route('/add_task')
 def add_task():
     return render_template("addtask.html", categories=list(mongo.db.categories.find()))
 
-# Insert the record and return to the Task List page. -->
+# INSERT the task and return to the Task List page. -->
 @app.route('/insert_task', methods=["POST"])
 def insert_task():
     tasks = mongo.db.tasks
@@ -64,6 +65,20 @@ def delete_task(task_id):
     mongo.db.tasks.remove({"_id": ObjectId(task_id)})
     return redirect(gitpod_url + 'get_tasks')
     #return redirect(url_for('get_tasks'))
+
+# Show the Add Category page.
+@app.route('/add_category')
+def add_category():
+    return render_template("addcategory.html")
+
+# INSERT the category and return to the Category List page. -->
+@app.route('/insert_category', methods=["POST"])
+def insert_category():
+    categories = mongo.db.categories
+    category_doc = {"category_name": request.form.get('category_name')}
+    categories.insert_one(category_doc)
+    return redirect(gitpod_url + 'get_categories')
+    #return redirect(url_for('get_categories'))
 
 # Show the Categories page.
 @app.route('/get_categories')
