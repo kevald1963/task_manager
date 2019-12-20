@@ -10,7 +10,7 @@ app.config["MONGO_DBNAME"] = "task_manager"
 
 mongo = PyMongo(app)
 
-gp_url = "https://5000-ae34fd21-0471-4da9-8255-f8e6a8ea7825.ws-eu01.gitpod.io/"
+gitpod_url = "https://5000-ae34fd21-0471-4da9-8255-f8e6a8ea7825.ws-eu01.gitpod.io/"
 
 @app.route('/')
 @app.route('/get_tasks')
@@ -27,7 +27,7 @@ def insert_task():
     # Convert form data to a dictionary to make it usable by Mongo.
     tasks.insert_one(request.form.to_dict())
     # Have to use hard-coded gitpod url, otherwise tries to redirect to localhost causing a connection refused error.
-    return redirect(gp_url + 'get_tasks')
+    return redirect(gitpod_url + 'get_tasks')
     #return redirect(url_for('get_tasks'))
 
 @app.route('/edit_task/<task_id>')
@@ -39,6 +39,20 @@ def edit_task(task_id):
     category_list = [category for category in _categories]
     # Display the record for editing.
     return render_template("edittask.html", task= _task, categories = category_list)
+
+@app.route('/update_task/<task_id>', methods=["POST"])
+def update_task(task_id):
+    tasks = mongo.db.tasks
+    tasks.update( {'_id': ObjectId(task_id)},
+    {
+        'task_name': request.form.get('task_name'),
+        'category_name': request.form.get('category_name'),
+        'task_description': request.form.get('task_description'),
+        'due_date': request.form.get('due_date'),
+        'is_urgent': request.form.get('is_urgent')
+    })
+    return redirect(gitpod_url + 'get_tasks')
+    #return redirect(url_for('get_tasks'))
 
 if __name__ == '__main__':
     app.run(host=os.getenv('IP'),

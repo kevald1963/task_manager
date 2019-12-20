@@ -3,7 +3,7 @@
 
 <h4>Edit Task</h4>
 <div class="row">
-    <form action="{{ url_for('insert_task') }}" method="POST" class="col s12">
+    <form action="{{ url_for('update_task', task_id=task._id) }}" method="POST" class="col s12">
         <!-- CATEGORY -->
         <div class="row">
             <div class="input-field col s12">
@@ -43,7 +43,6 @@
         <div class="row">
             <div class="input-field col s12" id="matfix">
                 <i class="material-icons prefix">today</i>
-                <!-- <input id="due_date" name="due_date" type="text" class="datepicker"> -->
                 <input id="due_date" name="due_date" type="text" class="datepicker" value="{{task.due_date}}">
                 <label for="icon_prefix">Due Date</label>
             </div>
@@ -72,7 +71,13 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
+
 <script>
+/*  
+Code below is correct but doesn't work for some reason. Wouldn't display the Due Date. Workaround was 
+to set value="{{task.due_date}}" in the input element. Doesn't appear to have any adverse effect on 
+displaying or updating the Due Date.
+*/
     $(document).ready(function() {
         // Note that 'due_date' below is a local variable to this function but shares same name 
         // as database field in tasks record.
