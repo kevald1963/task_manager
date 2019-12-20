@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h4>Edit Task</h4>
 <div class="row">
+    <h4>Edit Task</h4>
     <form action="{{ url_for('update_task', task_id=task._id) }}" method="POST" class="col s12">
         <!-- CATEGORY -->
         <div class="row">
@@ -71,11 +71,10 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
-
 <script>
 /*  
 Code below is correct but doesn't work for some reason. Wouldn't display the Due Date. Workaround was 
-to set value="{{task.due_date}}" in the input element. Doesn't appear to have any adverse effect on 
+to set value="{{task.due_date}}" in the <input> element. Doesn't appear to have any adverse effect on 
 displaying or updating the Due Date.
 */
     $(document).ready(function() {

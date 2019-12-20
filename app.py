@@ -13,6 +13,7 @@ mongo = PyMongo(app)
 # Have to use hard-coded gitpod url, otherwise tries to redirect to localhost causing a 'connection refused' error.
 gitpod_url = "https://5000-ae34fd21-0471-4da9-8255-f8e6a8ea7825.ws-eu01.gitpod.io/"
 
+# Show the Task List page.
 @app.route('/')
 @app.route('/get_tasks')
 def get_tasks():
@@ -22,7 +23,7 @@ def get_tasks():
 def add_task():
     return render_template("addtask.html", categories=list(mongo.db.categories.find()))
 
-# Create Go to the Edit Task page and show the data for the ID associated with this task record. -->
+# Insert the record and return to the Task List page. -->
 @app.route('/insert_task', methods=["POST"])
 def insert_task():
     tasks = mongo.db.tasks
@@ -31,18 +32,18 @@ def insert_task():
     return redirect(gitpod_url + 'get_tasks')
     #return redirect(url_for('get_tasks'))
 
-# Go to the Edit Task page and show the data for for the passed task ID parameter. -->
+# Go to the Edit Task page. -->
 @app.route('/edit_task/<task_id>')
 def edit_task(task_id):
-    # Fetch the task record from the database for the displayed to edit.
+    # Fetch the task from the database.
     _task = mongo.db.tasks.find_one({"_id": ObjectId(task_id)})
     # Fetch all categories from the database to display in the dropdown list, so user can choose a new one if they wish.
     _categories = mongo.db.categories.find()
     category_list = [category for category in _categories]
-    # Display the record for editing.
+    # Display the page for editing.
     return render_template("edittask.html", task= _task, categories = category_list)
 
-# UPDATE the record from the collection and return to the Task List page.
+# UPDATE the task in the collection and return to the Task List page.
 @app.route('/update_task/<task_id>', methods=["POST"])
 def update_task(task_id):
     tasks = mongo.db.tasks
@@ -57,22 +58,38 @@ def update_task(task_id):
     return redirect(gitpod_url + 'get_tasks')
     #return redirect(url_for('get_tasks'))
 
-# DELETE the record from the collection and return to the Task List page.
+# DELETE the task from the collection and return to the Task List page.
 @app.route('/delete_task/<task_id>')
 def delete_task(task_id):
     mongo.db.tasks.remove({"_id": ObjectId(task_id)})
     return redirect(gitpod_url + 'get_tasks')
     #return redirect(url_for('get_tasks'))
 
-# Show the existing categories.
+# Show the Categories page.
 @app.route('/get_categories')
 def get_categories():
     return render_template("categories.html", categories= mongo.db.categories.find())
 
-# Go to the Edit Category page and show the data for the passed category ID parameter. -->
+# Show the Edit Category page. -->
 @app.route('/edit_category/<category_id>')
 def edit_category(category_id):
-    return render_template("editcategory.html", category = mongo.db.categories.find_one({"_id": ObjectId(task_id)}))
+    return render_template("editcategory.html", category = mongo.db.categories.find_one({"_id": ObjectId(category_id)}))
+
+# UPDATE the category in the collection and return to the Category List page.
+@app.route('/update_category/<category_id>', methods=['POST'])
+def update_category(category_id):
+    mongo.db.categories.update(
+        {'_id': ObjectId(category_id)},
+        {'category_name': request.form.get('category_name')})
+    return redirect(gitpod_url + 'get_categories')
+    #return redirect(url_for('get_categories'))
+
+# DELETE the category from the collection and return to the Category List page.
+@app.route('/delete_category/<category_id>')
+def delete_category(category_id):
+    mongo.db.categories.remove({'_id': ObjectId(category_id)})
+    return redirect(gitpod_url + 'get_categories')
+    #return redirect(url_for('get_categories'))
 
 if __name__ == '__main__':
     app.run(host=os.getenv('IP'),
