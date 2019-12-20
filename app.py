@@ -31,7 +31,7 @@ def insert_task():
     return redirect(gitpod_url + 'get_tasks')
     #return redirect(url_for('get_tasks'))
 
-# Go to the Edit Task page and show the data for the ID associated with this task record. -->
+# Go to the Edit Task page and show the data for for the passed task ID parameter. -->
 @app.route('/edit_task/<task_id>')
 def edit_task(task_id):
     # Fetch the task record from the database for the displayed to edit.
@@ -63,6 +63,16 @@ def delete_task(task_id):
     mongo.db.tasks.remove({"_id": ObjectId(task_id)})
     return redirect(gitpod_url + 'get_tasks')
     #return redirect(url_for('get_tasks'))
+
+# Show the existing categories.
+@app.route('/get_categories')
+def get_categories():
+    return render_template("categories.html", categories= mongo.db.categories.find())
+
+# Go to the Edit Category page and show the data for the passed category ID parameter. -->
+@app.route('/edit_category/<category_id>')
+def edit_category(category_id):
+    return render_template("editcategory.html", category = mongo.db.categories.find_one({"_id": ObjectId(task_id)}))
 
 if __name__ == '__main__':
     app.run(host=os.getenv('IP'),
