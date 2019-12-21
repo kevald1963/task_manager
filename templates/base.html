@@ -3,7 +3,6 @@
 <head>
 
     <meta charset="UTF-8">
-    <meta name="viewport" content="width={device-width}, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Task Manager</title>
     
@@ -13,6 +12,29 @@
 
 </head>
 <body>
+    <header>
+    <div class="row">
+            <nav>
+            <div class="nav-wrapper">
+                <!-- Navigate to Home page if logo link activated. -->
+                <a href="{{ url_for('get_tasks') }}" class="brand-logo center">Task Manager</a>
+                <!-- Hamburger-style side-navigation menu -->
+                <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+                <ul id="nav-mobile" class="right hide-on-med-and-down">
+                    <li><a href="{{ url_for('get_tasks') }}">Home</a></li>
+                    <li><a href="{{ url_for('add_task') }}">Add a task</a></li>
+                    <li><a href="{{ url_for('get_categories') }}">Manage categories</a></li>
+                </ul>
+                 <ul class="side-nav" id="mobile-demo">
+                    <li><a href="{{ url_for('get_tasks') }}">Home</a></li>
+                    <li><a href="{{ url_for('add_task') }}">Add a task</a></li>
+                    <li><a href="{{ url_for('get_categories') }}">Manage categories</a></li>
+                </ul>
+            </div>
+        </nav>    
+    </div>
+    </header>
+
     <div class="container">
         {% block content %}
         {% endblock %}
@@ -25,6 +47,7 @@
         $(document).ready(function(){
             $('.collapsible').collapsible();
             $('select').material_select();
+            $(".button-collapse").sideNav();
         });
 
         $('.datepicker').pickadate({
@@ -34,12 +57,6 @@
             clear: 'Clear',
             close: 'Ok',
             closeOnSelect: false // Close upon selecting a date
-        });
-    </script>
-
-    <script>
-        document.getElementById("matfix").addEventListener("click", function(e) {
-        e.stopPropagation();
         });
     </script>
 
