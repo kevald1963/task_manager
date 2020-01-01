@@ -11,28 +11,29 @@
     <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
 
 </head>
+
 <body>
     <header>
-    <div class="row">
+        <div class="row">
             <nav>
-            <div class="nav-wrapper">
-                <!-- Navigate to Home page if logo link activated. -->
-                <a href="{{ url_for('get_tasks') }}" class="brand-logo center">Task Manager</a>
-                <!-- Hamburger-style side-navigation menu -->
-                <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
-                <ul id="nav-mobile" class="right hide-on-med-and-down">
-                    <li><a href="{{ url_for('get_tasks') }}">Home</a></li>
-                    <li><a href="{{ url_for('add_task') }}">Add a task</a></li>
-                    <li><a href="{{ url_for('get_categories') }}">Manage categories</a></li>
-                </ul>
-                 <ul class="side-nav" id="mobile-demo">
-                    <li><a href="{{ url_for('get_tasks') }}">Home</a></li>
-                    <li><a href="{{ url_for('add_task') }}">Add a task</a></li>
-                    <li><a href="{{ url_for('get_categories') }}">Manage categories</a></li>
-                </ul>
-            </div>
-        </nav>    
-    </div>
+                <div class="nav-wrapper">
+                    <!-- Navigate to Home page if logo link activated. -->
+                    <a href="{{ url_for('get_tasks') }}" class="brand-logo center">Task Manager</a>
+                    <!-- Hamburger-style side-navigation menu -->
+                    <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+                    <ul id="nav-mobile" class="right hide-on-med-and-down">
+                        <li><a href="{{ url_for('get_tasks') }}">Home</a></li>
+                        <li><a href="{{ url_for('add_task') }}">Add a task</a></li>
+                        <li><a href="{{ url_for('get_categories') }}">Manage categories</a></li>
+                    </ul>
+                    <ul class="side-nav" id="mobile-demo">
+                        <li><a href="{{ url_for('get_tasks') }}">Home</a></li>
+                        <li><a href="{{ url_for('add_task') }}">Add a task</a></li>
+                        <li><a href="{{ url_for('get_categories') }}">Manage categories</a></li>
+                    </ul>
+                </div>
+            </nav>    
+        </div>
     </header>
 
     <div class="container">
